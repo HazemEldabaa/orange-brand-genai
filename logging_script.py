@@ -5,6 +5,9 @@ from PIL import Image
 import numpy as np
 import json
 
+# Add your API key here
+wandb.login(key="your-api-key")
+
 # Change this with the path of the json file containing your parameters
 with open('parameters.json', 'r') as file:
     config = json.load(file)
