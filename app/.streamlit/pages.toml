@@ -9,6 +9,11 @@ name = "Advice app"
 icon = ":vibration_mode:"
 
 [[pages]]
+path = "blind_test.py"
+name = "Blind Test"
+icon = ":test_tube:"
+
+[[pages]]
 path = "contacts.py"
 name = "Contact us"
 icon = ":envelope_with_arrow:"
