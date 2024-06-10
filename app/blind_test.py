@@ -1,7 +1,7 @@
 import streamlit as st
 import os
 import sqlite3
-
+import random
 # Database setup
 def init_db():
     conn = sqlite3.connect('user_clicks.db')
@@ -69,7 +69,7 @@ def main_page(min_index, max_index):
     col1, col2, col3 = st.columns([1, 1.5, 1])
     image_path = "app/images/"
     images = sorted(os.listdir(image_path))  # Ensure images are sorted
-
+    random.shuffle(images)
     # Adjust max_index to ensure it doesn't exceed the length of the images list
     max_index = min(max_index, len(images))
 
