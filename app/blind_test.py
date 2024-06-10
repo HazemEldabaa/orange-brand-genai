@@ -67,7 +67,7 @@ def main_page(min_index, max_index):
 
     # Create three columns
     col1, col2, col3 = st.columns([1, 1.5, 1])
-    image_path = "images/"
+    image_path = "app/images/"
     images = sorted(os.listdir(image_path))  # Ensure images are sorted
 
     # Adjust max_index to ensure it doesn't exceed the length of the images list
