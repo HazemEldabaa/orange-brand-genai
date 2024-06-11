@@ -14,6 +14,16 @@ name = "Blind Test"
 icon = ":test_tube:"
 
 [[pages]]
+path = "app/lora_explainer.py"
+name = "Blind Test"
+icon = ":paper:"
+
+[[pages]]
+path = "app/prompt.py"
+name = "Prompt"
+icon = ":camera:"
+
+[[pages]]
 path = "app/contacts.py"
 name = "Contact us"
 icon = ":envelope_with_arrow:"
