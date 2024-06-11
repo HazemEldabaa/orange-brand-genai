@@ -147,7 +147,7 @@ def main_page(user_id):
         st.session_state['displayed_images'] = []
 
     col1, col2, col3 = st.columns([1, 1.5, 1])
-    image_path = "images/"
+    image_path = "app/images/"
     images = sorted(os.listdir(image_path))  # Ensure images are sorted
     random.shuffle(images)
 

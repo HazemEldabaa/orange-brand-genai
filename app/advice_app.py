@@ -40,7 +40,7 @@ file_path = 'app/frontend/public/extracted/Jean/log.html'
 # Parse the HTML file and get the metadata
 images_data = parse_html_file(file_path)
 st.markdown ('## :camera: :orange[Select your Ad]')
-imageCarouselComponent = components.declare_component('image-carousel-component', path='frontend/public')
+imageCarouselComponent = components.declare_component('image-carousel-component', path='app/frontend/public')
 # imageUrls = ['extracted/2024-06-04/2024-06-04_09-25-28_6602.png',
 #              'extracted/2024-06-04/2024-06-04_09-26-35_5259.png',
 #              'https://api.wandb.ai/files/becode/image-generation/2ytn0xms/media/images/generated_image_0_00e9665fceb7356a1e0f.png'
