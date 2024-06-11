@@ -35,7 +35,7 @@ def parse_html_file(file_path):
     return images_data
 
 # Specify the path to the HTML file
-file_path = 'frontend/public/extracted/Jean/log.html'
+file_path = 'app/frontend/public/extracted/Jean/log.html'
 
 # Parse the HTML file and get the metadata
 images_data = parse_html_file(file_path)

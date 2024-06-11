@@ -1,19 +1,29 @@
 [[pages]]
-path = "home.py"
+path = "app/home.py"
 name = "Home"
 icon = ":house:"
 
 [[pages]]
-path = "advice_app.py"
+path = "app/advice_app.py"
 name = "Advice app"
 icon = ":vibration_mode:"
 
 [[pages]]
-path = "blind_test.py"
+path = "app/blind_test.py"
 name = "Blind Test"
 icon = ":test_tube:"
 
 [[pages]]
-path = "contacts.py"
+path = "app/lora_explainer.py"
+name = "Blind Test"
+icon = ":paper:"
+
+[[pages]]
+path = "app/prompt.py"
+name = "Prompt"
+icon = ":camera:"
+
+[[pages]]
+path = "app/contacts.py"
 name = "Contact us"
 icon = ":envelope_with_arrow:"
