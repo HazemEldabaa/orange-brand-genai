@@ -193,30 +193,30 @@ def main_page(user_id):
         st.image(os.path.join(image_path, image_name), use_column_width=True, caption=f"Image {image_index + 1}")
 
     with col3:
-        st.write("\n" * 25)  # Create vertical space for alignment
-        st.markdown("#### Like this image?")
-        like_btn = st.button("👍")
-        dislike_btn = st.button("👎")
-        col6, col7 = st.columns([1, 1])
-        with col6:
-            if like_btn:
-                st.session_state['next_image']=False
-                id, correct, correct_percentage, like_percentage, dislike_percentage = log_click(user_id, image_index, "left", None, None, True, False)
-                st.session_state[f'like_message_{image_index}'] = f"Liked! {like_percentage:.0f}% of others liked this image."
-        with col7:
-            if dislike_btn:
-                st.session_state['next_image']=False
-                id, correct, correct_percentage, like_percentage, dislike_percentage = log_click(user_id, image_index, "left", None, None, False, True)
-                st.session_state[f'dislike_message_{image_index}'] = f"Disliked! {dislike_percentage:.0f}% of others disliked this image."
-        if f'like_message_{image_index}' in st.session_state:
-            st.success(st.session_state[f'like_message_{image_index}'])
-            del st.session_state[f'like_message_{image_index}']
-            st.session_state['next_image'] = False
+        # st.write("\n" * 25)  # Create vertical space for alignment
+        # st.markdown("#### Like this image?")
+        # like_btn = st.button("👍")
+        # dislike_btn = st.button("👎")
+        # col6, col7 = st.columns([1, 1])
+        # with col6:
+        #     if like_btn:
+        #         st.session_state['next_image']=False
+        #         id, correct, correct_percentage, like_percentage, dislike_percentage = log_click(user_id, image_index, "left", None, None, True, False)
+        #         st.session_state[f'like_message_{image_index}'] = f"Liked! {like_percentage:.0f}% of others liked this image."
+        # with col7:
+        #     if dislike_btn:
+        #         st.session_state['next_image']=False
+        #         id, correct, correct_percentage, like_percentage, dislike_percentage = log_click(user_id, image_index, "left", None, None, False, True)
+        #         st.session_state[f'dislike_message_{image_index}'] = f"Disliked! {dislike_percentage:.0f}% of others disliked this image."
+        # if f'like_message_{image_index}' in st.session_state:
+        #     st.success(st.session_state[f'like_message_{image_index}'])
+        #     del st.session_state[f'like_message_{image_index}']
+        #     st.session_state['next_image'] = False
 
-        if f'dislike_message_{image_index}' in st.session_state:
-            st.error(st.session_state[f'dislike_message_{image_index}'])
-            del st.session_state[f'dislike_message_{image_index}']
-            st.session_state['next_image'] = False
+        # if f'dislike_message_{image_index}' in st.session_state:
+        #     st.error(st.session_state[f'dislike_message_{image_index}'])
+        #     del st.session_state[f'dislike_message_{image_index}']
+        #     st.session_state['next_image'] = False
 
         # Display countdown timer without blocking
         countdown_placeholder = st.empty()
