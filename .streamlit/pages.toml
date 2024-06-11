@@ -15,8 +15,8 @@ icon = ":test_tube:"
 
 [[pages]]
 path = "app/lora_explainer.py"
-name = "Blind Test"
-icon = ":paper:"
+name = "Lora Explainer"
+icon = ":memo:"
 
 [[pages]]
 path = "app/prompt.py"
