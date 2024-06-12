@@ -180,9 +180,9 @@ def main_page(user_id, min_index, images):
                 id, correct_or_incorrect, percentage, like_percentage, dislike_percentage = log_click(user_id, image_index, ai_or_real, correct, incorrect, None, None)
 
                 if correct:
-                    st.success(f"Correct! {percentage:.0f}%")
+                    st.success("Correct!%")
                 else:
-                    st.error(f"Incorrect! {percentage:.0f}%")
+                    st.error("Incorrect!%")
                 st.session_state['image_clicked'] = True
                 st.session_state['min_index'] += 1
                 st.session_state['ai_or_real'] = None
