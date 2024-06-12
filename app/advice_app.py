@@ -64,9 +64,9 @@ if selectedImageUrl is not None:
                             st.markdown(f'###### {metadata["Prompt"]}')
                             st.markdown("### :orange[Base Model:]")
                             st.markdown(f'###### {metadata["Base Model"]}')
-                            if metadata['Refiner']:
+                            if metadata['Refiner Model']:
                                 st.markdown("### :orange[Refiner:]")
-                                st.markdown(f'###### {metadata["Refiner"]}')
+                                st.markdown(f'###### {metadata["Refiner Model"]}')
                             st.markdown("### :orange[LoRA 1:]")
                             st.markdown(f'###### {metadata["LoRA 1"]}')
                             if metadata['LoRA 2']:
@@ -89,9 +89,9 @@ if selectedImageUrl is not None:
                             st.markdown(f'##### {metadata["Prompt"]}')
                             st.markdown("## :orange[Base Model:]")
                             st.markdown(f'##### {metadata["Base Model"]}')
-                            if metadata['Refiner']:
+                            if metadata['Refiner Model']:
                                 st.markdown("### :orange[Refiner:]")
-                                st.markdown(f'###### {metadata["Refiner"]}')
+                                st.markdown(f'###### {metadata["Refiner Model"]}')
                             st.markdown("## :orange[LoRA 1:]")
                             st.markdown(f'##### {metadata["LoRA 1"]}')
                             if metadata['LoRA 2']:
