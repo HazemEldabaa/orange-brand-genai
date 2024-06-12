@@ -5,6 +5,8 @@ import random
 import time
 from datetime import datetime, timedelta
 
+st.set_page_config(layout="wide")
+
 # Database setup
 def init_db():
     conn = sqlite3.connect('user_clicks.db')
@@ -161,7 +163,7 @@ def main_page(user_id):
     if 'displayed_images' not in st.session_state:
         st.session_state['displayed_images'] = []
 
-    col1, col2, col3 = st.columns([0.5, 2, 0.5])
+    col1, col2, col3 = st.columns([0.5, 1.5, 0.5])
     image_path = "app/images/"
     images = sorted(os.listdir(image_path))  # Ensure images are sorted
     random.shuffle(images)
@@ -177,34 +179,37 @@ def main_page(user_id):
     image_label = "positive" if "positive" in image_name else "negative"
     st.session_state['displayed_images'].append(image_name)
     image_index = len(st.session_state['displayed_images']) - 1
-
+    st.write(f"Displaying image: {image_name}")
+    st.write(f"Assigned label: {image_label}")
     with col1:
         st.write("\n" * 25)
         st.markdown("#### Real or AI?")
 
         real_btn = st.button("I'm 100% real bro!")
         ai_btn = st.button("Definitely AI made!")
-    ai_or_real = 'real' if image_label == "positive" else 'ai'
+        ai_or_real = 'real' if image_label == "positive" else 'ai'
 
     if real_btn or ai_btn:
         if real_btn and ai_btn:
             st.error("Please choose only one option.")
-        elif real_btn:
+        if real_btn:
             correct = image_label == "positive"
-            button_type = "real"
-        elif ai_btn:
+            incorrect = not correct
+            id, correct_or_incorrect, percentage, like_percentage, dislike_percentage = log_click(user_id, image_index, ai_or_real, correct, incorrect, None, None)
+            if correct:
+                st.success(f"Correct! {percentage:.0f}% of others guessed correctly.")
+            else:
+                st.error(f"Incorrect! {percentage:.0f}% of others guessed incorrectly.")
+            st.session_state['next_image'] = True
+        if ai_btn:
             correct = image_label == "negative"
-            button_type = "ai"
-
-        incorrect = not correct
-        id, correct_or_incorrect, percentage, like_percentage, dislike_percentage = log_click(user_id, image_index, ai_or_real, correct, incorrect, None, None)
-        
-        if correct:
-            st.success(f"Correct! {percentage:.0f}% of others guessed correctly.")
-        else:
-            st.error(f"Incorrect! {percentage:.0f}% of others guessed incorrectly.")
-        
-        st.session_state['next_image'] = True
+            incorrect = not correct
+            id, correct_or_incorrect, percentage, like_percentage, dislike_percentage = log_click(user_id, image_index, ai_or_real, correct, incorrect, None, None)
+            if correct:
+                st.success(f"Correct! {percentage:.0f}% of others guessed correctly.")
+            else:
+                st.error(f"Incorrect! {percentage:.0f}% of others guessed incorrectly.")
+            st.session_state['next_image'] = True
     else:
         st.error("Please choose an option.")
 
