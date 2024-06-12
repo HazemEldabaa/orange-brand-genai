@@ -5,7 +5,7 @@ icon = ":house:"
 
 [[pages]]
 path = "app/advice_app.py"
-name = "Advice app"
+name = "Carousel"
 icon = ":vibration_mode:"
 
 [[pages]]

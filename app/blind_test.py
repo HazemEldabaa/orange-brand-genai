@@ -12,7 +12,6 @@ def init_db():
     conn = sqlite3.connect('user_clicks.db')
     c = conn.cursor()
     
-    # Create table if it doesn't exist
     c.execute('''
         CREATE TABLE IF NOT EXISTS clicks (
             id INTEGER PRIMARY KEY,
@@ -55,7 +54,6 @@ def log_click(user_id, image_index, image_side, correct, incorrect, like, dislik
         global_correct_percentage = 0
         global_incorrect_percentage = 0
 
-    # Fetch like/dislike stats for the specific image
     c.execute('''
         SELECT 
             SUM(CASE WHEN "like" THEN 1 ELSE 0 END) as like_count,
@@ -75,13 +73,10 @@ def log_click(user_id, image_index, image_side, correct, incorrect, like, dislik
     conn.close()
     return image_index, correct or incorrect, global_correct_percentage, like_percentage, dislike_percentage
 
-
-
 def get_statistics(user_id):
     conn = sqlite3.connect('user_clicks.db')
     c = conn.cursor()
     
-    # User statistics
     c.execute('''
         SELECT 
             image_side,
@@ -94,7 +89,6 @@ def get_statistics(user_id):
     ''', (user_id,))
     user_stats = c.fetchall()
     
-    # Global statistics
     c.execute('''
         SELECT 
             image_side,
@@ -109,7 +103,6 @@ def get_statistics(user_id):
     conn.close()
     
     return user_stats, global_stats
-
 
 def show_statistics(user_id):
     user_stats, global_stats = get_statistics(user_id)
@@ -135,135 +128,116 @@ def show_statistics(user_id):
 
     def calculate_percentage(correct, total):
         return (correct / total * 100) if total > 0 else 0
-
-    st.write("### Your Statistics")
-    for image_type in ['ai', 'real', 'all']:
-        correct_percentage = calculate_percentage(user_summary[image_type][0], user_summary[image_type][2])
-        st.write(f"{image_type.capitalize()} Images - Your correct guess ratio: {correct_percentage:.0f}%")
-        st.write(f"Correct guesses: {user_summary[image_type][0]}")
-        st.write(f"Incorrect guesses: {user_summary[image_type][1]}")
-        st.write(f"Total responses: {user_summary[image_type][2]}")
-        st.write("---")
-    
-    st.write("### Global Statistics")
-    for image_type in ['ai', 'real', 'all']:
-        correct_percentage = calculate_percentage(global_summary[image_type][0], global_summary[image_type][2])
-        st.write(f"{image_type.capitalize()} Images - Global correct guess ratio: {correct_percentage:.0f}%")
-        st.write(f"Correct guesses: {global_summary[image_type][0]}")
-        st.write(f"Incorrect guesses: {global_summary[image_type][1]}")
-        st.write(f"Total responses: {global_summary[image_type][2]}")
-        st.write("---")
+    col9, col10 = st.columns([1, 1])
+    with col9:
+        st.write("### Your Statistics")
+        for image_type in ['ai', 'real', 'all']:
+            correct_percentage = calculate_percentage(user_summary[image_type][0], user_summary[image_type][2])
+            st.write(f"{image_type.capitalize()} Images - You Guessed {correct_percentage:.0f}% Correctly")
+            st.write("---")
+    with col10:
+        st.write("### Global Statistics")
+        for image_type in ['ai', 'real', 'all']:
+            correct_percentage = calculate_percentage(global_summary[image_type][0], global_summary[image_type][2])
+            st.write(f"{image_type.capitalize()} Images - Others Guessed {correct_percentage:.0f}% Correctly")
+            st.write(f"Total responses: {global_summary[image_type][2]}")
+            st.write("---")
 
 
-
-
-def main_page(user_id):
+def main_page(user_id, min_index, images):
     st.markdown('<h1 style="text-align: center; color: orange;">🟧 Blind Test</h1>', unsafe_allow_html=True)
 
     if 'displayed_images' not in st.session_state:
         st.session_state['displayed_images'] = []
 
+    if 'ai_or_real' not in st.session_state:
+        st.session_state['ai_or_real'] = None
+
     col1, col2, col3 = st.columns([1, 1.5, 1])
-    image_path = "app/images/"
-    images = sorted(os.listdir(image_path))  # Ensure images are sorted
-    random.shuffle(images)
 
-    images = [img for img in images if img not in st.session_state['displayed_images']]
-    max_index = len(images)
 
-    if max_index == 0:
+    try:
+        index = min_index
+        image_name = images[index]
+        image_label = "positive" if "positive" in image_name else "negative"
+        st.session_state['displayed_images'].append(image_name)
+        image_index = len(st.session_state['displayed_images'])
+        st.write(f"Displaying image: {image_name}")
+
+        
+        with col1:
+            st.write("\n" * 25)
+            st.markdown("#### Real or AI?")
+
+            if st.session_state['ai_or_real'] is None:
+                st.session_state['ai_or_real'] = 'real' if image_label == "positive" else 'ai'
+            ai_or_real = st.session_state['ai_or_real']
+
+            st.write(f"Assigned label: {ai_or_real}")
+
+            if st.button("I'am real", key=f"real_{index}"):
+                correct = ai_or_real == "real"
+                incorrect = not correct
+                id, correct_or_incorrect, percentage, like_percentage, dislike_percentage = log_click(user_id, image_index, ai_or_real, correct, incorrect, None, None)
+
+                if correct:
+                    st.success(f"Correct! {percentage:.0f}% of others guessed correctly.")
+                else:
+                    st.error(f"Incorrect! {percentage:.0f}% of others guessed incorrectly.")
+                st.session_state['image_clicked'] = True
+                st.session_state['min_index'] += 1
+                st.session_state['ai_or_real'] = None
+                time.sleep(2)
+                st.rerun()
+
+            if st.button("I'am AI generated", key=f"ai_{index}"):
+                correct1 = ai_or_real == "ai"
+                incorrect1 = not correct1
+                
+                id, correct_or_incorrect, percentage, like_percentage, dislike_percentage = log_click(user_id, image_index, ai_or_real, correct1, incorrect1, None, None)
+
+                if correct1:
+                    st.success(f"Correct! {percentage:.0f}% of others guessed correctly.")
+                else:
+                    st.error(f"Incorrect! {percentage:.0f}% of others guessed incorrectly.")
+                st.session_state['image_clicked'] = True
+                st.session_state['min_index'] += 1
+                st.session_state['ai_or_real'] = None
+                time.sleep(2)
+                st.rerun()
+
+        with col2:
+            st.image(os.path.join(image_path, images[index]), use_column_width=True, caption=f"Image {index + 1}")
+
+        with col3:
+
+            countdown_placeholder = st.empty()
+            start_time = datetime.now()
+            end_time = start_time + timedelta(seconds=10)
+            while datetime.now() < end_time:
+                countdown_placeholder.markdown(f"## :orange[Time left: **{(end_time - datetime.now()).seconds}** seconds]")
+                time.sleep(1)
+            st.session_state['image_clicked'] = True
+            st.session_state['min_index'] += 1
+            st.session_state['ai_or_real'] = None
+            st.rerun()
+
+            
+    except IndexError:
         show_statistics(user_id)
         return
 
-    image_name = images[0]
-    image_label = "positive" if "positive" in image_name else "negative"
-    st.session_state['displayed_images'].append(image_name)
-    image_index = len(st.session_state['displayed_images']) - 1
-    st.write(f"Displaying image: {image_name}")
-    st.write(f"Assigned label: {image_label}")
-    with col1:
-        st.write("\n" * 25)
-        st.markdown("#### Real or AI?")
-
-        real_btn = st.button("I'm 100% real bro!")
-        ai_btn = st.button("Definitely AI made!")
-        ai_or_real = 'real' if image_label == "positive" else 'ai'
-
-    if real_btn or ai_btn:
-        if real_btn and ai_btn:
-            st.error("Please choose only one option.")
-        elif real_btn:
-            correct = image_label == "positive"
-            incorrect = not correct
-            id, correct_or_incorrect, percentage, like_percentage, dislike_percentage = log_click(user_id, image_index, ai_or_real, correct, incorrect, None, None)
-            if correct:
-                st.success(f"Correct! {percentage:.0f}% of others guessed correctly.")
-            else:
-                st.error(f"Incorrect! {percentage:.0f}% of others guessed incorrectly.")
-            st.session_state['next_image'] = True
-        elif ai_btn:
-            correct = image_label == "negative"
-            incorrect = not correct
-            id, correct_or_incorrect, percentage, like_percentage, dislike_percentage = log_click(user_id, image_index, ai_or_real, correct, incorrect, None, None)
-            if correct:
-                st.success(f"Correct! {percentage:.0f}% of others guessed correctly.")
-            else:
-                st.error(f"Incorrect! {percentage:.0f}% of others guessed incorrectly.")
-            st.session_state['next_image'] = True
-    else:
-        st.error("Please choose an option.")
-
-    with col2:
-        st.image(os.path.join(image_path, image_name), use_column_width=True, caption=f"Image {image_index + 1}")
-
-    with col3:
-        # st.write("\n" * 25)  # Create vertical space for alignment
-        # st.markdown("#### Like this image?")
-        # like_btn = st.button("👍")
-        # dislike_btn = st.button("👎")
-        # col6, col7 = st.columns([1, 1])
-        # with col6:
-        #     if like_btn:
-        #         st.session_state['next_image']=False
-        #         id, correct, correct_percentage, like_percentage, dislike_percentage = log_click(user_id, image_index, "left", None, None, True, False)
-        #         st.session_state[f'like_message_{image_index}'] = f"Liked! {like_percentage:.0f}% of others liked this image."
-        # with col7:
-        #     if dislike_btn:
-        #         st.session_state['next_image']=False
-        #         id, correct, correct_percentage, like_percentage, dislike_percentage = log_click(user_id, image_index, "left", None, None, False, True)
-        #         st.session_state[f'dislike_message_{image_index}'] = f"Disliked! {dislike_percentage:.0f}% of others disliked this image."
-        # if f'like_message_{image_index}' in st.session_state:
-        #     st.success(st.session_state[f'like_message_{image_index}'])
-        #     del st.session_state[f'like_message_{image_index}']
-        #     st.session_state['next_image'] = False
-
-        # if f'dislike_message_{image_index}' in st.session_state:
-        #     st.error(st.session_state[f'dislike_message_{image_index}'])
-        #     del st.session_state[f'dislike_message_{image_index}']
-        #     st.session_state['next_image'] = False
-
-        # Display countdown timer without blocking
-        countdown_placeholder = st.empty()
-        start_time = datetime.now()
-        end_time = start_time + timedelta(seconds=10)
-        while datetime.now() < end_time:
-            countdown_placeholder.markdown(f"## :orange[Time left: **{(end_time - datetime.now()).seconds}** seconds]")
-            time.sleep(1)
-        st.rerun()
-        #st.session_state['next_image'] = True
-
-    if st.session_state.get('next_image'):
-        st.session_state['next_image'] = False
-        st.experimental_rerun()
-
 # Initialize session state variables
-if 'next_image' not in st.session_state:
-    st.session_state['next_image'] = False
 if 'user_id' not in st.session_state:
     st.session_state['user_id'] = str(random.randint(1000, 9999))
 
+if 'min_index' not in st.session_state:
+    st.session_state['min_index'] = 0
+
 # Initialize database
 init_db()
-
+image_path = "app/images/"
+images = sorted(os.listdir(image_path))
+random.shuffle(images)
 # Display the main page
-main_page(st.session_state['user_id'])
+main_page(st.session_state['user_id'], st.session_state['min_index'], images)
