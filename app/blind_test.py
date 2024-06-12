@@ -128,12 +128,14 @@ def show_statistics(user_id):
 
     def calculate_percentage(correct, total):
         return (correct / total * 100) if total > 0 else 0
+
     col9, col10 = st.columns([1, 1])
     with col9:
         st.write("### Your Statistics")
         for image_type in ['ai', 'real', 'all']:
             correct_percentage = calculate_percentage(user_summary[image_type][0], user_summary[image_type][2])
             st.write(f"{image_type.capitalize()} Images - You Guessed {correct_percentage:.0f}% Correctly")
+            st.write(f"Total responses: {user_summary[image_type][2]}")
             st.write("---")
     with col10:
         st.write("### Global Statistics")
@@ -142,7 +144,6 @@ def show_statistics(user_id):
             st.write(f"{image_type.capitalize()} Images - Others Guessed {correct_percentage:.0f}% Correctly")
             st.write(f"Total responses: {global_summary[image_type][2]}")
             st.write("---")
-
 
 def main_page(user_id, min_index, images):
     st.markdown('<h1 style="text-align: center; color: orange;">🟧 Blind Test</h1>', unsafe_allow_html=True)
@@ -173,9 +174,8 @@ def main_page(user_id, min_index, images):
                 st.session_state['ai_or_real'] = 'real' if image_label == "positive" else 'ai'
             ai_or_real = st.session_state['ai_or_real']
 
-            st.write(f"Assigned label: {ai_or_real}")
 
-            if st.button("I'am real", key=f"real_{index}"):
+            if st.button("100% real!", key=f"real_{index}"):
                 correct = ai_or_real == "real"
                 incorrect = not correct
                 id, correct_or_incorrect, percentage, like_percentage, dislike_percentage = log_click(user_id, image_index, ai_or_real, correct, incorrect, None, None)
@@ -187,10 +187,10 @@ def main_page(user_id, min_index, images):
                 st.session_state['image_clicked'] = True
                 st.session_state['min_index'] += 1
                 st.session_state['ai_or_real'] = None
-                time.sleep(2)
+                time.sleep(0.5)
                 st.rerun()
 
-            if st.button("I'am AI generated", key=f"ai_{index}"):
+            if st.button("Definitley AI!", key=f"ai_{index}"):
                 correct1 = ai_or_real == "ai"
                 incorrect1 = not correct1
                 
@@ -203,7 +203,7 @@ def main_page(user_id, min_index, images):
                 st.session_state['image_clicked'] = True
                 st.session_state['min_index'] += 1
                 st.session_state['ai_or_real'] = None
-                time.sleep(2)
+                time.sleep(0.5)
                 st.rerun()
 
         with col2:
@@ -236,8 +236,11 @@ if 'min_index' not in st.session_state:
 
 # Initialize database
 init_db()
-image_path = "app/images/"
-images = sorted(os.listdir(image_path))
-random.shuffle(images)
+image_path = "images/"
+if 'images' not in st.session_state:
+    images = sorted(os.listdir(image_path))
+    random.shuffle(images)
+    st.session_state['images'] = images
+
 # Display the main page
-main_page(st.session_state['user_id'], st.session_state['min_index'], images)
+main_page(st.session_state['user_id'], st.session_state['min_index'], st.session_state['images'])

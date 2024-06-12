@@ -84,7 +84,6 @@ if selectedImageUrl is not None:
                 with col2:
                     for metadata, image_path in images_data:
                         if selectedImageUrl.endswith(os.path.basename(image_path)):
-                            st.write('')
                             st.markdown("## :orange[Prompt:]")
                             st.markdown(f'##### {metadata["Prompt"]}')
                             st.markdown("## :orange[Base Model:]")
