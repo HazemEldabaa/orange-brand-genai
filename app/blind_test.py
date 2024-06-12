@@ -189,29 +189,29 @@ def main_page(user_id):
         ai_btn = st.button("Definitely AI made!")
         ai_or_real = 'real' if image_label == "positive" else 'ai'
 
-        if real_btn or ai_btn:
-            if real_btn and ai_btn:
-                st.error("Please choose only one option.")
-            if real_btn:
-                correct = image_label == "positive"
-                incorrect = not correct
-                id, correct_or_incorrect, percentage, like_percentage, dislike_percentage = log_click(user_id, image_index, ai_or_real, correct, incorrect, None, None)
-                if correct:
-                    st.success(f"Correct! {percentage:.0f}% of others guessed correctly.")
-                else:
-                    st.error(f"Incorrect! {percentage:.0f}% of others guessed incorrectly.")
-                st.session_state['next_image'] = True
-            if ai_btn:
-                correct = image_label == "negative"
-                incorrect = not correct
-                id, correct_or_incorrect, percentage, like_percentage, dislike_percentage = log_click(user_id, image_index, ai_or_real, correct, incorrect, None, None)
-                if correct:
-                    st.success(f"Correct! {percentage:.0f}% of others guessed correctly.")
-                else:
-                    st.error(f"Incorrect! {percentage:.0f}% of others guessed incorrectly.")
-                st.session_state['next_image'] = True
-        else:
-            st.error("Please choose an option.")
+    if real_btn or ai_btn:
+        if real_btn and ai_btn:
+            st.error("Please choose only one option.")
+        elif real_btn:
+            correct = image_label == "positive"
+            incorrect = not correct
+            id, correct_or_incorrect, percentage, like_percentage, dislike_percentage = log_click(user_id, image_index, ai_or_real, correct, incorrect, None, None)
+            if correct:
+                st.success(f"Correct! {percentage:.0f}% of others guessed correctly.")
+            else:
+                st.error(f"Incorrect! {percentage:.0f}% of others guessed incorrectly.")
+            st.session_state['next_image'] = True
+        elif ai_btn:
+            correct = image_label == "negative"
+            incorrect = not correct
+            id, correct_or_incorrect, percentage, like_percentage, dislike_percentage = log_click(user_id, image_index, ai_or_real, correct, incorrect, None, None)
+            if correct:
+                st.success(f"Correct! {percentage:.0f}% of others guessed correctly.")
+            else:
+                st.error(f"Incorrect! {percentage:.0f}% of others guessed incorrectly.")
+            st.session_state['next_image'] = True
+    else:
+        st.error("Please choose an option.")
 
     with col2:
         st.image(os.path.join(image_path, image_name), use_column_width=True, caption=f"Image {image_index + 1}")
