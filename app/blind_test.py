@@ -121,8 +121,6 @@ def show_statistics(user_id):
     st.write("### Your Statistics")
     st.write(f"Correct guesses: {user_correct_percentage:.0f}%")
     st.write(f"Incorrect guesses: {user_incorrect_percentage:.0f}%")
-    st.write(f"Likes: {user_stats[2]}")
-    st.write(f"Dislikes: {user_stats[3]}")
     st.write(f"Total responses: {user_stats[4]}")
     
     if global_stats[4] > 0:
@@ -135,8 +133,6 @@ def show_statistics(user_id):
     st.write("### Global Statistics")
     st.write(f"Correct guesses: {global_correct_percentage:.0f}%")
     st.write(f"Incorrect guesses: {global_incorrect_percentage:.0f}%")
-    st.write(f"Likes: {global_stats[2]}")
-    st.write(f"Dislikes: {global_stats[3]}")
     st.write(f"Total responses: {global_stats[4]}")
 
 
@@ -159,7 +155,7 @@ def main_page(user_id):
         return
 
     image_name = images[0]
-    image_label = "positive" if "positive_" in image_name else "negative"
+    image_label = "positive" if "positive" in image_name else "negative"
     st.session_state['displayed_images'].append(image_name)
     image_index = len(st.session_state['displayed_images']) - 1
 
@@ -169,25 +165,29 @@ def main_page(user_id):
 
         real_btn = st.button("I'm 100% real bro!")
         ai_btn = st.button("Definitely AI made!")
+    ai_or_real = 'real' if image_label == "positive" else 'ai'
 
-        if real_btn:
+    if real_btn or ai_btn:
+        if real_btn and ai_btn:
+            st.error("Please choose only one option.")
+        elif real_btn:
             correct = image_label == "positive"
-            incorrect = not correct
-            id, correct_or_incorrect, percentage, like_percentage, dislike_percentage = log_click(user_id, image_index, "right", correct, incorrect, None, None)
-            if correct:
-                st.success(f"Correct! {percentage:.0f}% of others guessed correctly.")
-            else:
-                st.error(f"Incorrect! {percentage:.0f}% of others guessed incorrectly.")
-            st.session_state['next_image'] = True
-        if ai_btn:
+            button_type = "real"
+        elif ai_btn:
             correct = image_label == "negative"
-            incorrect = not correct
-            id, correct_or_incorrect, percentage, like_percentage, dislike_percentage = log_click(user_id, image_index, "right", correct, incorrect, None, None)
-            if correct:
-                st.success(f"Correct! {percentage:.0f}% of others guessed correctly.")
-            else:
-                st.error(f"Incorrect! {percentage:.0f}% of others guessed incorrectly.")
-            st.session_state['next_image'] = True
+            button_type = "ai"
+
+        incorrect = not correct
+        id, correct_or_incorrect, percentage, like_percentage, dislike_percentage = log_click(user_id, image_index, ai_or_real, correct, incorrect, None, None)
+        
+        if correct:
+            st.success(f"Correct! {percentage:.0f}% of others guessed correctly.")
+        else:
+            st.error(f"Incorrect! {percentage:.0f}% of others guessed incorrectly.")
+        
+        st.session_state['next_image'] = True
+    else:
+        st.error("Please choose an option.")
 
     with col2:
         st.image(os.path.join(image_path, image_name), use_column_width=True, caption=f"Image {image_index + 1}")
@@ -223,7 +223,7 @@ def main_page(user_id):
         start_time = datetime.now()
         end_time = start_time + timedelta(seconds=10)
         while datetime.now() < end_time:
-            countdown_placeholder.markdown(f":orange[Time left: **{(end_time - datetime.now()).seconds}** seconds]")
+            countdown_placeholder.markdown(f"## :orange[Time left: **{(end_time - datetime.now()).seconds}** seconds]")
             time.sleep(1)
         st.rerun()
         #st.session_state['next_image'] = True
