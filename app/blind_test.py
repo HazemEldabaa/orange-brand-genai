@@ -161,7 +161,7 @@ def main_page(user_id):
     if 'displayed_images' not in st.session_state:
         st.session_state['displayed_images'] = []
 
-    col1, col2, col3 = st.columns([1, 1.5, 1])
+    col1, col2, col3 = st.columns([0.5, 2, 0.5])
     image_path = "app/images/"
     images = sorted(os.listdir(image_path))  # Ensure images are sorted
     random.shuffle(images)
