@@ -73,6 +73,8 @@ def log_click(user_id, image_index, image_side, correct, incorrect, like, dislik
     conn.close()
     return image_index, correct or incorrect, global_correct_percentage, like_percentage, dislike_percentage
 
+
+
 def get_statistics(user_id):
     conn = sqlite3.connect('user_clicks.db')
     c = conn.cursor()
@@ -80,60 +82,77 @@ def get_statistics(user_id):
     # User statistics
     c.execute('''
         SELECT 
+            image_side,
             SUM(CASE WHEN correct THEN 1 ELSE 0 END) as correct_count,
             SUM(CASE WHEN incorrect THEN 1 ELSE 0 END) as incorrect_count,
-            SUM(CASE WHEN "like" THEN 1 ELSE 0 END) as like_count,
-            SUM(CASE WHEN dislike THEN 1 ELSE 0 END) as dislike_count,
             COUNT(*) as total_count
         FROM clicks
         WHERE user_id = ?
+        GROUP BY image_side
     ''', (user_id,))
-    user_stats = c.fetchone()
+    user_stats = c.fetchall()
     
     # Global statistics
     c.execute('''
         SELECT 
+            image_side,
             SUM(CASE WHEN correct THEN 1 ELSE 0 END) as correct_count,
             SUM(CASE WHEN incorrect THEN 1 ELSE 0 END) as incorrect_count,
-            SUM(CASE WHEN "like" THEN 1 ELSE 0 END) as like_count,
-            SUM(CASE WHEN dislike THEN 1 ELSE 0 END) as dislike_count,
             COUNT(*) as total_count
         FROM clicks
+        GROUP BY image_side
     ''')
-    global_stats = c.fetchone()
+    global_stats = c.fetchall()
     
     conn.close()
     
     return user_stats, global_stats
+
 
 def show_statistics(user_id):
     user_stats, global_stats = get_statistics(user_id)
     
     st.markdown('## :orange[Survey Completed]')
     
-    if user_stats[4] > 0:
-        user_correct_percentage = (user_stats[0] / (user_stats[0] + user_stats[1])) * 100 if (user_stats[0] + user_stats[1]) > 0 else 0
-        user_incorrect_percentage = (user_stats[1] / (user_stats[0] + user_stats[1])) * 100 if (user_stats[0] + user_stats[1]) > 0 else 0
-    else:
-        user_correct_percentage = 0
-        user_incorrect_percentage = 0
+    user_summary = {'ai': [0, 0, 0], 'real': [0, 0, 0], 'all': [0, 0, 0]}
+    global_summary = {'ai': [0, 0, 0], 'real': [0, 0, 0], 'all': [0, 0, 0]}
     
+    for row in user_stats:
+        image_side, correct_count, incorrect_count, total_count = row
+        user_summary[image_side] = [correct_count, incorrect_count, total_count]
+        user_summary['all'][0] += correct_count
+        user_summary['all'][1] += incorrect_count
+        user_summary['all'][2] += total_count
+    
+    for row in global_stats:
+        image_side, correct_count, incorrect_count, total_count = row
+        global_summary[image_side] = [correct_count, incorrect_count, total_count]
+        global_summary['all'][0] += correct_count
+        global_summary['all'][1] += incorrect_count
+        global_summary['all'][2] += total_count
+
+    def calculate_percentage(correct, total):
+        return (correct / total * 100) if total > 0 else 0
+
     st.write("### Your Statistics")
-    st.write(f"Correct guesses: {user_correct_percentage:.0f}%")
-    st.write(f"Incorrect guesses: {user_incorrect_percentage:.0f}%")
-    st.write(f"Total responses: {user_stats[4]}")
-    
-    if global_stats[4] > 0:
-        global_correct_percentage = (global_stats[0] / (global_stats[0] + global_stats[1])) * 100 if (global_stats[0] + global_stats[1]) > 0 else 0
-        global_incorrect_percentage = (global_stats[1] / (global_stats[0] + global_stats[1])) * 100 if (global_stats[0] + global_stats[1]) > 0 else 0
-    else:
-        global_correct_percentage = 0
-        global_incorrect_percentage = 0
+    for image_type in ['ai', 'real', 'all']:
+        correct_percentage = calculate_percentage(user_summary[image_type][0], user_summary[image_type][2])
+        st.write(f"{image_type.capitalize()} Images - Your correct guess ratio: {correct_percentage:.0f}%")
+        st.write(f"Correct guesses: {user_summary[image_type][0]}")
+        st.write(f"Incorrect guesses: {user_summary[image_type][1]}")
+        st.write(f"Total responses: {user_summary[image_type][2]}")
+        st.write("---")
     
     st.write("### Global Statistics")
-    st.write(f"Correct guesses: {global_correct_percentage:.0f}%")
-    st.write(f"Incorrect guesses: {global_incorrect_percentage:.0f}%")
-    st.write(f"Total responses: {global_stats[4]}")
+    for image_type in ['ai', 'real', 'all']:
+        correct_percentage = calculate_percentage(global_summary[image_type][0], global_summary[image_type][2])
+        st.write(f"{image_type.capitalize()} Images - Global correct guess ratio: {correct_percentage:.0f}%")
+        st.write(f"Correct guesses: {global_summary[image_type][0]}")
+        st.write(f"Incorrect guesses: {global_summary[image_type][1]}")
+        st.write(f"Total responses: {global_summary[image_type][2]}")
+        st.write("---")
+
+
 
 
 def main_page(user_id):
