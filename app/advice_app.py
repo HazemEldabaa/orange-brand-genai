@@ -72,6 +72,8 @@ if selectedImageUrl is not None:
                             if metadata['LoRA 3']:
                                 st.markdown("## :orange[LoRA 3:]")
                                 st.markdown(f'##### {metadata["LoRA 3"]}')
+                            else:
+                                break
                             with st.expander("Show All Parameters:", expanded=False):
                                 st.json(metadata)
                             
