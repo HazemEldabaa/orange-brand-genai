@@ -66,6 +66,12 @@ if selectedImageUrl is not None:
                             st.markdown(f'##### {metadata["Base Model"]}')
                             st.markdown("## :orange[LoRA 1:]")
                             st.markdown(f'##### {metadata["LoRA 1"]}')
+                            if metadata['LoRA 2']:
+                                st.markdown("## :orange[LoRA 2:]")
+                                st.markdown(f'##### {metadata["LoRA 2"]}')
+                            if metadata['LoRA 3']:
+                                st.markdown("## :orange[LoRA 3:]")
+                                st.markdown(f'##### {metadata["LoRA 3"]}')
                             with st.expander("Show All Parameters:", expanded=False):
                                 st.json(metadata)
                             
@@ -86,6 +92,7 @@ if selectedImageUrl is not None:
                             st.markdown(f'##### {metadata["Base Model"]}')
                             st.markdown("## :orange[LoRA 1:]")
                             st.markdown(f'##### {metadata["LoRA 1"]}')
-                            with st.expander("Show All Parameters:", expanded=False):
-                                st.json(metadata)
+
                             break
+                with st.expander("Show All Parameters:", expanded=False):
+                    st.json(metadata)
