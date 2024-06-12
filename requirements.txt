@@ -37,6 +37,7 @@ multivolumefile==0.2.3
 nest-asyncio==1.6.0
 numpy==1.26.4
 opencv-python==4.10.0.82
+opencv-contrib-python-headless==4.10.0.82
 outcome==1.3.0.post0
 packaging==24.0
 pandas==2.2.2
