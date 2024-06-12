@@ -60,20 +60,15 @@ if selectedImageUrl is not None:
                 with col4:
                     #for metadata, image_path in images_data:
                         if selectedImageUrl.endswith(os.path.basename(image_path)):
-                            st.markdown("## :orange[Prompt:]")
-                            st.markdown(f'##### {metadata["Prompt"]}')
-                            st.markdown("## :orange[Base Model:]")
-                            st.markdown(f'##### {metadata["Base Model"]}')
-                            st.markdown("## :orange[LoRA 1:]")
-                            st.markdown(f'##### {metadata["LoRA 1"]}')
+                            st.markdown("### :orange[Prompt:]")
+                            st.markdown(f'###### {metadata["Prompt"]}')
+                            st.markdown("### :orange[Base Model:]")
+                            st.markdown(f'###### {metadata["Base Model"]}')
+                            st.markdown("### :orange[LoRA 1:]")
+                            st.markdown(f'###### {metadata["LoRA 1"]}')
                             if metadata['LoRA 2']:
-                                st.markdown("## :orange[LoRA 2:]")
-                                st.markdown(f'##### {metadata["LoRA 2"]}')
-                            if metadata['LoRA 3']:
-                                st.markdown("## :orange[LoRA 3:]")
-                                st.markdown(f'##### {metadata["LoRA 3"]}')
-                            else:
-                                break
+                                st.markdown("### :orange[LoRA 2:]")
+                                st.markdown(f'###### {metadata["LoRA 2"]}')
                             with st.expander("Show All Parameters:", expanded=False):
                                 st.json(metadata)
                             
@@ -86,14 +81,15 @@ if selectedImageUrl is not None:
                     for metadata, image_path in images_data:
                         if selectedImageUrl.endswith(os.path.basename(image_path)):
                             st.write('')
-                            st.write('')
-                            st.write('')
                             st.markdown("## :orange[Prompt:]")
                             st.markdown(f'##### {metadata["Prompt"]}')
                             st.markdown("## :orange[Base Model:]")
                             st.markdown(f'##### {metadata["Base Model"]}')
                             st.markdown("## :orange[LoRA 1:]")
                             st.markdown(f'##### {metadata["LoRA 1"]}')
+                            if metadata['LoRA 2']:
+                                st.markdown("## :orange[LoRA 2:]")   
+                                st.markdown(f'##### {metadata["LoRA 2"]}')                         
 
                             break
                 with st.expander("Show All Parameters:", expanded=False):
