@@ -163,7 +163,6 @@ def main_page(user_id, min_index, images):
         image_label = "positive" if "positive" in image_name else "negative"
         st.session_state['displayed_images'].append(image_name)
         image_index = len(st.session_state['displayed_images'])
-        st.write(f"Displaying image: {image_name}")
 
         
         with col1:
@@ -197,9 +196,9 @@ def main_page(user_id, min_index, images):
                 id, correct_or_incorrect, percentage, like_percentage, dislike_percentage = log_click(user_id, image_index, ai_or_real, correct1, incorrect1, None, None)
 
                 if correct1:
-                    st.success(f"Correct! {percentage:.0f}% of others guessed correctly.")
+                    st.success("Correct!")
                 else:
-                    st.error(f"Incorrect! {percentage:.0f}% of others guessed incorrectly.")
+                    st.error("Incorrect!")
                 st.session_state['image_clicked'] = True
                 st.session_state['min_index'] += 1
                 st.session_state['ai_or_real'] = None
