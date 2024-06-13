@@ -15,7 +15,7 @@ icon = ":test_tube:"
 
 [[pages]]
 path = "app/lora_explainer.py"
-name = "Lora Explainer"
+name = "Beyond BaseModel"
 icon = ":memo:"
 
 [[pages]]

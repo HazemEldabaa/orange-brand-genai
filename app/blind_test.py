@@ -174,22 +174,22 @@ def main_page(user_id, min_index, images):
             ai_or_real = st.session_state['ai_or_real']
 
 
-            if st.button("100% real!", key=f"real_{index}"):
+            if st.button("100% real, bro !", key=f"real_{index}"):
                 correct = ai_or_real == "real"
                 incorrect = not correct
                 id, correct_or_incorrect, percentage, like_percentage, dislike_percentage = log_click(user_id, image_index, ai_or_real, correct, incorrect, None, None)
 
                 if correct:
-                    st.success("Correct!%")
+                    st.success("Correct!")
                 else:
-                    st.error("Incorrect!%")
+                    st.error("Incorrect!")
                 st.session_state['image_clicked'] = True
                 st.session_state['min_index'] += 1
                 st.session_state['ai_or_real'] = None
                 time.sleep(1.5)
                 st.rerun()
 
-            if st.button("Definitley AI!", key=f"ai_{index}"):
+            if st.button("Definitley AI !", key=f"ai_{index}"):
                 correct1 = ai_or_real == "ai"
                 incorrect1 = not correct1
                 
@@ -212,7 +212,7 @@ def main_page(user_id, min_index, images):
 
             countdown_placeholder = st.empty()
             start_time = datetime.now()
-            end_time = start_time + timedelta(seconds=8)
+            end_time = start_time + timedelta(seconds=10)
             while datetime.now() < end_time:
                 countdown_placeholder.markdown(f"## :orange[Time left: **{(end_time - datetime.now()).seconds}** seconds]")
                 time.sleep(1)
