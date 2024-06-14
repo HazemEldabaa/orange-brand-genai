@@ -60,7 +60,7 @@ st.markdown(
 """
 )
 
-st.image('app/imgs/team.jpg', use_column_width=True)
+st.image('app/imgs/team-angel.jpg', use_column_width=True)
 
 # Display footer
 footer = """
