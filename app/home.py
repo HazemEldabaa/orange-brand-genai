@@ -1,6 +1,6 @@
 import streamlit as st
 
-PAGE_TITLE = "Orange Advice app"
+PAGE_TITLE = "Orange Image GenAI"
 PAGE_ICON = ":orange_heart:"
 st.set_page_config(page_title=PAGE_TITLE, page_icon=PAGE_ICON, layout="wide")
 
@@ -30,12 +30,12 @@ st.markdown(
 )
 
 with st.sidebar:
-    st.image("imgs/orange_home.png", width=150)
+    st.image("app/imgs/orange_home.png", width=150)
 
 
 # Display header image and title
-st.image("imgs/orange_header.png", use_column_width="always")
-st.title("Welcome to the Orange Advice app! :orange_heart:")
+st.image("app/imgs/orange_header.png", use_column_width="always")
+st.title("Welcome to the Orange Image GenAI! :orange_heart:")
 st.markdown(horizontal_bar, True)
 
 
@@ -44,14 +44,18 @@ col1, spacer, col2 = st.columns([1, 0.05, 1])
 with col1:
     st.markdown(
         """
-        We have created a prediction ML-based tool allowing to propose upsell or downsell plan to Orange customers.
+        We have created an interactive app to generate and interact with various methodologies for Stable Diffusion.
 
-        **Our app is designed to be reliable and user-friendly:**
-        - based on data and analysis
-        - based on strong machine learning models
-        - based on skilled data scientists team
-        - easy to use and accessible to everyone
-        - intuitive and interactive
+        **For the generation:**
+        - Use keywords extracted from brandbook as base
+        - Use of stable diffusion models and improvement layers (Refiners, LoRAs)
+        - Use of Fooocus as GUI for easy experimentation
+        - Minimum or no manual intervention on the image
+
+        **For the interactions:**
+        - To make a blind test on generated vs real image
+        - To display generated images with their logs
+        - For direct prompting
 
         ***Enjoy your experience!***
     """
@@ -60,10 +64,10 @@ with col1:
 with col2:
     st.markdown(
         """
-        Here you can find the possibile Orange tariff plans:
+        The Squad:
     """
     )    
-    st.image("imgs/orange_tariff_plans.png")
+    st.image("imgs/absolute_units.png")
 
 # Display footer
 footer = """

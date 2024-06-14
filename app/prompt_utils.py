@@ -67,13 +67,15 @@ def get_json(div_id, url):
         print("No data extracted.")
         return None
 
-def send_prompt(link, prompt_text, json_link):
+def send_prompt(link, prompt_text, json_link, headless = True):
     options = Options()
     options.add_argument("--disable-gpu")
     options.add_argument("--no-sandbox")
     options.add_argument("--disable-dev-shm-usage")
     options.add_argument("--incognito")
-    # options.add_argument("--headless")  # Enable headless mode
+    if headless:
+        options.add_argument("--headless")
+
     options.add_argument("--window-size=1920,1080")  # Set a reasonable window size
     options.add_argument("--disable-blink-features=AutomationControlled")
     options.add_argument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
@@ -118,12 +120,20 @@ def send_prompt(link, prompt_text, json_link):
         model = driver.find_element(By.XPATH, '//*[@id="component-216"]/div[1]/button[3]')
         model.click()
 
-        model_dropdown = WebDriverWait(driver, 20).until(
+        refiner_dropdown = WebDriverWait(driver, 20).until(
             EC.element_to_be_clickable((By.XPATH, '//*[@id="component-121"]/label/div/div[1]/div/input'))
+        )
+        refiner_dropdown.click()  # Click to open the dropdown
+        refiner_dropdown.clear()
+        refiner_dropdown.send_keys("realistic") #realisticVisionV60B1
+        refiner_dropdown.send_keys(Keys.ENTER)
+
+        model_dropdown = WebDriverWait(driver, 20).until(
+            EC.element_to_be_clickable((By.XPATH, '//*[@id="component-120"]/label/div/div[1]/div/input'))
         )
         model_dropdown.click()  # Click to open the dropdown
         model_dropdown.clear()
-        model_dropdown.send_keys("realisticVisionV60B1") #realisticVisionV60B1
+        model_dropdown.send_keys("mobius") #mobius
         model_dropdown.send_keys(Keys.ENTER)
         
         lora2_drop_down = WebDriverWait(driver, 20).until(
@@ -131,7 +141,7 @@ def send_prompt(link, prompt_text, json_link):
         )
         lora2_drop_down.click()  # Click to open the dropdown
         lora2_drop_down.clear()
-        lora2_drop_down.send_keys("add-detail-xl") #add-detail-xl
+        lora2_drop_down.send_keys("perfect_eyes") #add-detail-xl
         lora2_drop_down.send_keys(Keys.ENTER)
 
         # Find the prompt textarea and send the prompt text
@@ -140,12 +150,15 @@ def send_prompt(link, prompt_text, json_link):
         )
         prompt_textarea.clear()  # Clear any existing text
         prompt_textarea.send_keys(prompt_text)  # Send the provided prompt text
-        
-        # Find and click the generate button
-        btn = driver.find_element(By.XPATH, '//*[@id="generate_button"]')
+        prompt_textarea.send_keys(Keys.ENTER)  # Press Enter to confirm the prompt text
+
+        btn = WebDriverWait(driver, 20).until(
+                EC.element_to_be_clickable((By.XPATH, '//*[@id="generate_button"]'))
+        )
         btn.click()
 
-        generated_image = WebDriverWait(driver, 120).until(
+
+        generated_image = WebDriverWait(driver, 160).until(
         EC.presence_of_element_located((By.XPATH, '//*[@id="final_gallery"]/div[2]/div/button/img'))
         )
 
@@ -165,7 +178,7 @@ def send_prompt(link, prompt_text, json_link):
         img = cv2.imdecode(arr, -1)  # 'Load it as it is'
         img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 
-        time.sleep(10)
+        time.sleep(3)
 
         settings = driver.find_element(By.XPATH, '//*[@id="component-216"]/div[1]/button[1]')
         settings.click()
@@ -173,15 +186,15 @@ def send_prompt(link, prompt_text, json_link):
         logs = driver.find_element(By.XPATH, '//*[@id="component-109"]/a')
         logs.click()
 
-        # logs_url = driver.getCurrentUrl()
-        # print(logs_url)
-
         df = get_json(image_id, json_link)
 
-        time.sleep(20)
+        time.sleep(3)
 
         # Save the image
         return {"image": img, "data": df}
 
     except Exception as e:
         print(f"An error occurred: {e}")
+
+
+# Example usage
