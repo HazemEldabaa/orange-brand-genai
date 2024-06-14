@@ -5,13 +5,14 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 import time
-import cv2
 import numpy as np
 import urllib
 import ssl
 from bs4 import BeautifulSoup
 import pandas as pd
 import requests
+import io
+
 
 def get_json(div_id, url):
 
@@ -175,8 +176,7 @@ def send_prompt(link, prompt_text, json_link, headless = True):
 
         req = urllib.request.urlopen(image_src, context=ssl_context)
         arr = np.asarray(bytearray(req.read()), dtype=np.uint8)
-        img = cv2.imdecode(arr, -1)  # 'Load it as it is'
-        img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        img = io.BytesIO(arr)
 
         time.sleep(3)
 
@@ -189,12 +189,7 @@ def send_prompt(link, prompt_text, json_link, headless = True):
         df = get_json(image_id, json_link)
 
         time.sleep(3)
-
-        # Save the image
         return {"image": img, "data": df}
 
     except Exception as e:
         print(f"An error occurred: {e}")
-
-
-# Example usage

@@ -1,6 +1,6 @@
 import streamlit as st
 
-PAGE_TITLE = "Orange Advice app"
+PAGE_TITLE = "Orange Image GenAI"
 PAGE_ICON = ":orange_heart:"
 st.set_page_config(page_title=PAGE_TITLE, page_icon=PAGE_ICON, layout="wide")
 
@@ -30,11 +30,11 @@ st.markdown(
 )
 
 with st.sidebar:
-    st.image("imgs/orange_mail.png", width=150)
+    st.image("app/imgs/orange_mail.png", width=150)
 
 
 # Display header image and title
-st.image("imgs/orange_people.png", use_column_width="always")
+st.image("app/imgs/orange_people.png", use_column_width="always")
 st.title("Team contacts")
 st.markdown(horizontal_bar, True)
 
@@ -42,21 +42,25 @@ st.markdown(
     """    
         **Jean Duffy**: 
             https://github.com/jduffy93
+
+        **Hazem El-Dabaa**: 
+            https://github.com/polinaya777
         
         **Maarten Knaepen**: 
             https://github.com/MaartenKnaepen
-        
+
+        **Sylvain Legay**: 
+            https://github.com/slvg01
+
         **Mark Shevchenko**: 
             https://github.com/pr0fi7
         
-        **Polina Yarova**: 
-            https://github.com/polinaya777
-        
-        **Sylvain Legay**: 
-            https://github.com/slvg01
+
                         
 """
 )
+
+st.image('app/imgs/team.jpg', use_column_width=True)
 
 # Display footer
 footer = """

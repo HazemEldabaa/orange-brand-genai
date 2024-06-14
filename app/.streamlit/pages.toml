@@ -1,5 +1,5 @@
 [[pages]]
-path = "app/home.py"
+path = "home.py"
 name = "Home"
 icon = ":house:"
 
@@ -24,6 +24,16 @@ name = "Prompt"
 icon = ":camera:"
 
 [[pages]]
-path = "app/contacts.py"
+path = "app/conclusion.py"
+name = "Conclusion"
+icon = "🎯"
+
+[[pages]]
+path = "app/appendix.py"
+name = "Appendix"
+icon = "📎"
+
+[[pages]]
+path = "contacts.py"
 name = "Contact us"
 icon = ":envelope_with_arrow:"
