@@ -1,5 +1,6 @@
 import streamlit as st 
-
+PAGE_TITLE = "Orange Image GenAI"
+PAGE_ICON = ":orange_heart:"
 # Set the page layout to wide
 st.set_page_config(layout="wide")
 

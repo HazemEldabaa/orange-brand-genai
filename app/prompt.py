@@ -1,6 +1,7 @@
 import streamlit as st
 from prompt_utils import send_prompt
-
+PAGE_TITLE = "Orange Image GenAI"
+PAGE_ICON = ":orange_heart:"
 prompt = st.text_input("Enter your prompt here:")
 generate_button = st.button("Generate Image")
 headless = st.checkbox("Headless Mode", value=False)

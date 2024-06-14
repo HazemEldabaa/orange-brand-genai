@@ -4,7 +4,8 @@ import sqlite3
 import random
 import time
 from datetime import datetime, timedelta
-
+PAGE_TITLE = "Orange Image GenAI"
+PAGE_ICON = ":orange_heart:"
 st.set_page_config(layout="wide")
 
 # Database setup
@@ -189,7 +190,7 @@ def main_page(user_id, min_index, images):
                 time.sleep(1.5)
                 st.rerun()
 
-            if st.button("Definitley AI !", key=f"ai_{index}"):
+            if st.button("Definitely AI !", key=f"ai_{index}"):
                 correct1 = ai_or_real == "ai"
                 incorrect1 = not correct1
                 

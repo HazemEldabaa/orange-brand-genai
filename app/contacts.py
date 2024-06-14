@@ -44,7 +44,7 @@ st.markdown(
             https://github.com/jduffy93
 
         **Hazem El-Dabaa**: 
-            https://github.com/polinaya777
+            https://github.com/HazemEldabaa/
         
         **Maarten Knaepen**: 
             https://github.com/MaartenKnaepen
@@ -60,7 +60,7 @@ st.markdown(
 """
 )
 
-st.image('app/imgs/team-angel.png', use_column_width=True)
+st.image('app/imgs/team.jpg', use_column_width=True)
 
 # Display footer
 footer = """

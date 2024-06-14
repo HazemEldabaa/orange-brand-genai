@@ -1,5 +1,6 @@
 import streamlit as st
-
+PAGE_TITLE = "Orange Image GenAI"
+PAGE_ICON = ":orange_heart:"
 st.set_page_config(layout="wide")
 
 # Create three columns

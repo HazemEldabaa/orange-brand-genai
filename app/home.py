@@ -44,18 +44,18 @@ col1, spacer, col2 = st.columns([1, 0.05, 1])
 with col1:
     st.markdown(
         """
-        We have created an interactive app to generate and interact with various methodologies for Stable Diffusion.
+        We have created an app reflecting our work on AI generated pictures.
 
-        **For the generation:**
-        - Use keywords extracted from brandbook as base
-        - Use of stable diffusion models and improvement layers (Refiners, LoRAs)
-        - Use of Fooocus as GUI for easy experimentation
+        **About the generation environment:**
+        - Keywords extracted from brandbook as base
+        - Stable diffusion models and improvement layers (Refiners, LoRAs)
+        - Fooocus as GUI for easy experimentation
         - Minimum or no manual intervention on the image
 
-        **For the interactions:**
-        - To make a blind test on generated vs real image
-        - To display generated images with their logs
-        - For direct prompting
+        **About the app functionalities:**
+        - Make a blind test on generated vs real image
+        - Display generated images with their logs
+        - Direct prompting and generation
 
         ***Enjoy your experience!***
     """
@@ -67,7 +67,7 @@ with col2:
         The Squad:
     """
     )    
-    st.image("app/imgs/absolute_units.png")
+    st.image("app/imgs/team-angel.png")
 
 # Display footer
 footer = """
