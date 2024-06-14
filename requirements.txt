@@ -92,3 +92,4 @@ wandb==0.17.0
 watchdog==4.0.1
 wcwidth==0.2.13
 wsproto==1.2.0
+webdriver-manager==4.0.1
