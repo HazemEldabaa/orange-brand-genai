@@ -55,6 +55,7 @@ def get_json(div_id, url):
     return pd.DataFrame(data)
 
 def send_prompt(url, prompt_text, json_link, headless=False):
+    driver = None
     try:
         options = Options()
         if headless:
@@ -117,5 +118,6 @@ def send_prompt(url, prompt_text, json_link, headless=False):
         print(f"An error occurred: {e}")
         return None
     finally:
-        driver.quit()
+        if driver:
+            driver.quit()
 
