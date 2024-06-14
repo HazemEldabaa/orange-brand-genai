@@ -4,7 +4,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.core.os_manager import ChromeType
@@ -17,39 +16,31 @@ import pandas as pd
 import requests
 import io
 
-
 def get_json(div_id, url):
-
     URL = url
     page = requests.get(URL)
-
     soup = BeautifulSoup(page.content, "html.parser")
 
-    # Locate the div by ID and extract table data
     div = soup.find('div', {'id': div_id})
     if not div:
         print(f"No div with id {div_id} found.")
         return None
 
-    # Assuming the table is inside this div
     table = div.find('table')
     if not table:
         print(f"No table found inside div with id {div_id}.")
         return None
-        
-    # Prepare to collect data
+
     data = []
 
-    # Iterate through rows of the main table
     for row in table.find_all('tr'):
-        # Each row has a main cell with an image and another table with metadata
         cells = row.find_all('td')
         if len(cells) < 2:
-            continue  # Skip rows that don't have at least two cells (image and metadata)
+            continue
 
         image_info = cells[0].text.strip()
         metadata_table = cells[1].find('table')
-        
+
         if metadata_table:
             metadata = {}
             for meta_row in metadata_table.find_all('tr'):
@@ -58,127 +49,52 @@ def get_json(div_id, url):
                 value = value_cell.text.strip()
                 metadata[label] = value
 
-            # Add image info as part of metadata
             metadata['Image Info'] = image_info
-            
-            # Append to the data list
             data.append(metadata)
-    
-    # Convert the collected data into a DataFrame
-    if data:
-        df = pd.DataFrame(data)
-        return df
-    else:
-        print("No data extracted.")
-        return None
 
-def send_prompt(link, prompt_text, json_link, headless = True):
-    options = Options()
-    options.add_argument("--disable-gpu")
-    options.add_argument("--no-sandbox")
-    options.add_argument("--disable-dev-shm-usage")
-    options.add_argument("--incognito")
-    if headless:
-        options.add_argument("--headless")
+    return pd.DataFrame(data)
 
-    options.add_argument("--window-size=1920,1080")  # Set a reasonable window size
-    options.add_argument("--disable-blink-features=AutomationControlled")
-    options.add_argument("--user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36")
-
+def send_prompt(url, prompt_text, json_link, headless=False):
     try:
-        driver = webdriver.Chrome(service=Service(
-            ChromeDriverManager(chrome_type=ChromeType.CHROMIUM).install()
-        ),options=options)
-        driver.get(link)
-        driver.implicitly_wait(30)
-        
-        # Locate and interact with elements
-        advanced = driver.find_element(By.XPATH, '//*[@id="component-21"]/label/input')
-        
-        # Click on the advanced checkbox
-        advanced.click()
-        
-        # Wait for a brief moment
-        time.sleep(2)
-        preset_dropdown = WebDriverWait(driver, 20).until(
-            EC.element_to_be_clickable((By.XPATH, '//*[@id="component-99"]/label/div/div[1]/div/input'))
-        )
-        preset_dropdown.click()  # Click to open the dropdown
-        preset_dropdown.clear()
-        preset_dropdown.send_keys("realistic")
-        preset_dropdown.send_keys(Keys.ENTER)
-        
-        time.sleep(2)
+        options = Options()
+        if headless:
+            options.add_argument("--headless")
+        options.add_argument("--disable-gpu")
+        options.add_argument("--no-sandbox")
+        options.add_argument("--disable-dev-shm-usage")
 
-        # Wait for the performance checkbox to be clickable
-        performance = WebDriverWait(driver, 20).until(
-            EC.element_to_be_clickable((By.XPATH, '//*[@id="component-100"]/div[2]/label[1]/input'))
-        )
-        
-        # Click the performance checkbox if not already selected
-        if not performance.is_selected():
-            performance.click()
-        
-        # Clear and set quantity to 1
-        quantity = driver.find_element(By.XPATH, '//*[@id="component-104"]/div[2]/div/input')
-        quantity.clear()
-        quantity.send_keys("1")
+        driver = webdriver.Chrome(service=Service(ChromeDriverManager(chrome_type=ChromeType.GOOGLE).install()), options=options)
 
-        model = driver.find_element(By.XPATH, '//*[@id="component-216"]/div[1]/button[3]')
-        model.click()
+        driver.get(url)
 
-        refiner_dropdown = WebDriverWait(driver, 20).until(
-            EC.element_to_be_clickable((By.XPATH, '//*[@id="component-121"]/label/div/div[1]/div/input'))
-        )
-        refiner_dropdown.click()  # Click to open the dropdown
-        refiner_dropdown.clear()
-        refiner_dropdown.send_keys("realistic") #realisticVisionV60B1
-        refiner_dropdown.send_keys(Keys.ENTER)
-
-        model_dropdown = WebDriverWait(driver, 20).until(
-            EC.element_to_be_clickable((By.XPATH, '//*[@id="component-120"]/label/div/div[1]/div/input'))
-        )
-        model_dropdown.click()  # Click to open the dropdown
-        model_dropdown.clear()
-        model_dropdown.send_keys("mobius") #mobius
-        model_dropdown.send_keys(Keys.ENTER)
-        
-        lora2_drop_down = WebDriverWait(driver, 20).until(
+        lora1_drop_down = WebDriverWait(driver, 20).until(
             EC.element_to_be_clickable((By.XPATH, '//*[@id="component-133"]/label/div/div[1]/div/input'))
         )
-        lora2_drop_down.click()  # Click to open the dropdown
-        lora2_drop_down.clear()
-        lora2_drop_down.send_keys("perfect_eyes") #add-detail-xl
-        lora2_drop_down.send_keys(Keys.ENTER)
+        lora1_drop_down.click()
+        lora1_drop_down.clear()
+        lora1_drop_down.send_keys("perfect_eyes")
+        lora1_drop_down.send_keys(Keys.ENTER)
 
-        # Find the prompt textarea and send the prompt text
         prompt_textarea = WebDriverWait(driver, 20).until(
             EC.element_to_be_clickable((By.XPATH, '//*[@id="positive_prompt"]/label/textarea'))
         )
-        prompt_textarea.clear()  # Clear any existing text
-        prompt_textarea.send_keys(prompt_text)  # Send the provided prompt text
-        prompt_textarea.send_keys(Keys.ENTER)  # Press Enter to confirm the prompt text
+        prompt_textarea.clear()
+        prompt_textarea.send_keys(prompt_text)
+        prompt_textarea.send_keys(Keys.ENTER)
 
         btn = WebDriverWait(driver, 20).until(
-                EC.element_to_be_clickable((By.XPATH, '//*[@id="generate_button"]'))
+            EC.element_to_be_clickable((By.XPATH, '//*[@id="generate_button"]'))
         )
         btn.click()
 
-
         generated_image = WebDriverWait(driver, 160).until(
-        EC.presence_of_element_located((By.XPATH, '//*[@id="final_gallery"]/div[2]/div/button/img'))
+            EC.presence_of_element_located((By.XPATH, '//*[@id="final_gallery"]/div[2]/div/button/img'))
         )
 
-        
         ssl_context = ssl._create_unverified_context()
-
-
         image_src = generated_image.get_attribute("src")
         print(image_src)
         image_id = image_src.split("/")[-1].split(".")[0] + "_png"
-
-
-
 
         req = urllib.request.urlopen(image_src, context=ssl_context)
         arr = np.asarray(bytearray(req.read()), dtype=np.uint8)
@@ -199,3 +115,7 @@ def send_prompt(link, prompt_text, json_link, headless = True):
 
     except Exception as e:
         print(f"An error occurred: {e}")
+        return None
+    finally:
+        driver.quit()
+
