@@ -67,7 +67,7 @@ with col2:
         The Squad:
     """
     )    
-    st.image("imgs/absolute_units.png")
+    st.image("app/imgs/absolute_units.png")
 
 # Display footer
 footer = """
