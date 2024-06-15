@@ -112,8 +112,9 @@ def send_prompt(url, prompt_text, json_link, headless=False):
         return {"image": img, "data": df}
 
     except Exception as e:
-        print(f"An error occurred: {e}")
-        return None
+        error_message = f"An error occurred: {e}"
+        print(error_message)
+        return {"error": error_message}
     finally:
         if driver:
             driver.quit()
