@@ -1,9 +1,11 @@
 from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
+from webdriver_manager.chrome import ChromeDriverManager
 import time
 import numpy as np
 import urllib
@@ -55,17 +57,26 @@ def send_prompt(url, prompt_text, json_link, headless=False):
     driver = None
     try:
         options = Options()
-
         options.add_argument("--headless")
         options.add_argument("--disable-gpu")
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--window-size=1920,1080")  # Set window size for headless mode
+        options.add_argument('--disable-extensions')
+        options.add_argument('--proxy-server="direct://"')
+        options.add_argument('--proxy-bypass-list=*')
+        options.add_argument('--start-maximized')
+        options.add_argument('--headless')
+        options.add_argument('--disable-dev-shm-usage')
+        options.add_argument('--no-sandbox')
+        options.add_argument('--disable-gpu')
 
-        driver = webdriver.Chrome(options=options)
+        # Use webdriver_manager to manage ChromeDriver
+        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
         driver.get(url)
 
-        lora1_drop_down = WebDriverWait(driver, 20).until(
+        lora1_drop_down = WebDriverWait(driver, 30).until(
             EC.element_to_be_clickable((By.XPATH, '//*[@id="component-133"]/label/div/div[1]/div/input'))
         )
         lora1_drop_down.click()
@@ -73,19 +84,19 @@ def send_prompt(url, prompt_text, json_link, headless=False):
         lora1_drop_down.send_keys("perfect_eyes")
         lora1_drop_down.send_keys(Keys.ENTER)
 
-        prompt_textarea = WebDriverWait(driver, 20).until(
+        prompt_textarea = WebDriverWait(driver, 30).until(
             EC.element_to_be_clickable((By.XPATH, '//*[@id="positive_prompt"]/label/textarea'))
         )
         prompt_textarea.clear()
         prompt_textarea.send_keys(prompt_text)
         prompt_textarea.send_keys(Keys.ENTER)
 
-        btn = WebDriverWait(driver, 20).until(
+        btn = WebDriverWait(driver, 30).until(
             EC.element_to_be_clickable((By.XPATH, '//*[@id="generate_button"]'))
         )
         btn.click()
 
-        generated_image = WebDriverWait(driver, 160).until(
+        generated_image = WebDriverWait(driver, 180).until(
             EC.presence_of_element_located((By.XPATH, '//*[@id="final_gallery"]/div[2]/div/button/img'))
         )
 
@@ -118,4 +129,3 @@ def send_prompt(url, prompt_text, json_link, headless=False):
     finally:
         if driver:
             driver.quit()
-
