@@ -4,9 +4,6 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.chrome.service import Service
-from webdriver_manager.chrome import ChromeDriverManager
-from webdriver_manager.core.os_manager import ChromeType
 import time
 import numpy as np
 import urllib
@@ -58,13 +55,13 @@ def send_prompt(url, prompt_text, json_link, headless=False):
     driver = None
     try:
         options = Options()
-        if headless:
-            options.add_argument("--headless")
+
+        options.add_argument("--headless")
         options.add_argument("--disable-gpu")
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-dev-shm-usage")
 
-        driver = webdriver.Chrome(service=Service(ChromeDriverManager(chrome_type=ChromeType.GOOGLE).install()), options=options)
+        driver = webdriver.Chrome(options=options)
 
         driver.get(url)
 
