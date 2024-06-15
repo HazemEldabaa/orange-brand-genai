@@ -16,7 +16,8 @@ st.write(f'Here is the link to the Gradio app: {url}')
 
 if generate_button:
     if prompt:
-        dictionary = send_prompt(url, prompt, json_link, headless=headless) 
+        with st.spinner('Generating image...'):
+            dictionary = send_prompt(url, prompt, json_link, headless=headless)
         if dictionary:
             for key, value in dictionary.items():
                 if key == 'image':
