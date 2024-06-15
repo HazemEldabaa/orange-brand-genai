@@ -1,6 +1,6 @@
 import streamlit as st
 
-PAGE_TITLE = "Orange Image GenAI"
+PAGE_TITLE = "Contact Us"
 PAGE_ICON = ":orange_heart:"
 st.set_page_config(page_title=PAGE_TITLE, page_icon=PAGE_ICON, layout="wide")
 

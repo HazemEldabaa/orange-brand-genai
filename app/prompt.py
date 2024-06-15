@@ -1,7 +1,7 @@
 import streamlit as st
 from prompt_utils import send_prompt
 
-PAGE_TITLE = "Orange Image GenAI"
+PAGE_TITLE = "Prompt"
 PAGE_ICON = ":orange_heart:"
 st.set_page_config(page_title=PAGE_TITLE, page_icon=PAGE_ICON)
 

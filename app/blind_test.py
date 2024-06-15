@@ -4,9 +4,9 @@ import sqlite3
 import random
 import time
 from datetime import datetime, timedelta
-PAGE_TITLE = "Orange Image GenAI"
+PAGE_TITLE = "Blind Test"
 PAGE_ICON = ":orange_heart:"
-st.set_page_config(layout="wide")
+st.set_page_config(page_title=PAGE_TITLE, page_icon=PAGE_ICON, layout="wide")
 
 # Database setup
 def init_db():
@@ -156,7 +156,8 @@ def main_page(user_id, min_index, images):
         st.session_state['ai_or_real'] = None
 
     col1, col2, col3 = st.columns([1, 1.5, 1])
-
+    # bannertop = st.empty()
+    # bannerdown = st.empty()
 
     try:
         index = min_index
@@ -197,9 +198,11 @@ def main_page(user_id, min_index, images):
                 id, correct_or_incorrect, percentage, like_percentage, dislike_percentage = log_click(user_id, image_index, ai_or_real, correct1, incorrect1, None, None)
 
                 if correct1:
-                    st.success("Correct!")
+                    with st.empty():
+                        st.success("Correct!")
                 else:
-                    st.error("Incorrect!")
+                    with st.empty():
+                        st.error("Incorrect!")
                 st.session_state['image_clicked'] = True
                 st.session_state['min_index'] += 1
                 st.session_state['ai_or_real'] = None
@@ -236,7 +239,7 @@ if 'min_index' not in st.session_state:
 
 # Initialize database
 init_db()
-image_path = "app/images/"
+image_path = "images/"
 if 'images' not in st.session_state:
     images = sorted(os.listdir(image_path))
     random.shuffle(images)

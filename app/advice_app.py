@@ -3,9 +3,8 @@ import streamlit.components.v1 as components
 import os
 from bs4 import BeautifulSoup
 
-PAGE_TITLE = "Orange Image GenAI"
-PAGE_ICON = ":orange_heart:"
-st.set_page_config(page_title="Select your Ad", page_icon=":camera:", layout="wide")
+
+st.set_page_config(page_title="Select your Ad", page_icon=":orange_heart:", layout="wide")
 
 def parse_html_file(file_path):
     with open(file_path, 'r', encoding='utf-8') as file:

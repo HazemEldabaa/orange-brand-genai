@@ -1,7 +1,7 @@
 import streamlit as st
-PAGE_TITLE = "Orange Image GenAI"
+PAGE_TITLE = "Appendix"
 PAGE_ICON = ":orange_heart:"
-st.set_page_config(layout="wide")
+st.set_page_config(page_title=PAGE_TITLE, page_icon=PAGE_ICON, layout="wide")
 
 # Create three columns
 col1, col2, col3 = st.columns([1.25, 7.5, 1.25])
