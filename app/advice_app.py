@@ -39,11 +39,11 @@ imageCarouselComponent = components.declare_component('image-carousel-component'
 
 imageUrls = [img[1] for img in images_data]
 selectedImageUrl = imageCarouselComponent(imageUrls=imageUrls, height=300)
-
+col1, col2 = st.columns([1.5, 1.5])
+col3, col4 = st.columns([3, 1.5])
 if selectedImageUrl is not None:
     for metadata, image_path in images_data:
-        col1, col2 = st.columns([1.5, 1.5])
-        col3, col4 = st.columns([3, 1.5])
+
         if selectedImageUrl.endswith(os.path.basename(image_path)):
             if metadata['Resolution'] == '(1152, 896)':
                 with col3:
