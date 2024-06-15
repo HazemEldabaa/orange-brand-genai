@@ -66,17 +66,20 @@ def send_prompt(url, prompt_text, json_link, headless=False):
         options.add_argument('--proxy-server="direct://"')
         options.add_argument('--proxy-bypass-list=*')
         options.add_argument('--start-maximized')
-        options.add_argument('--headless')
         options.add_argument('--disable-dev-shm-usage')
         options.add_argument('--no-sandbox')
         options.add_argument('--disable-gpu')
 
         # Use webdriver_manager to manage ChromeDriver
-        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+        service = Service(ChromeDriverManager().install())
+        driver = webdriver.Chrome(service=service, options=options)
 
         driver.get(url)
 
-        lora1_drop_down = WebDriverWait(driver, 30).until(
+        # Add logs to track the execution
+        print("Opened URL")
+
+        lora1_drop_down = WebDriverWait(driver, 60).until(
             EC.element_to_be_clickable((By.XPATH, '//*[@id="component-133"]/label/div/div[1]/div/input'))
         )
         lora1_drop_down.click()
@@ -84,27 +87,49 @@ def send_prompt(url, prompt_text, json_link, headless=False):
         lora1_drop_down.send_keys("perfect_eyes")
         lora1_drop_down.send_keys(Keys.ENTER)
 
-        prompt_textarea = WebDriverWait(driver, 30).until(
+        print("Entered LoRA")
+
+        prompt_textarea = WebDriverWait(driver, 60).until(
             EC.element_to_be_clickable((By.XPATH, '//*[@id="positive_prompt"]/label/textarea'))
         )
         prompt_textarea.clear()
         prompt_textarea.send_keys(prompt_text)
         prompt_textarea.send_keys(Keys.ENTER)
 
-        btn = WebDriverWait(driver, 30).until(
+        print("Entered prompt text")
+
+        btn = WebDriverWait(driver, 60).until(
             EC.element_to_be_clickable((By.XPATH, '//*[@id="generate_button"]'))
         )
         btn.click()
 
-        generated_image = WebDriverWait(driver, 180).until(
+        print("Clicked generate button")
+
+        # Wait for the image to be generated
+        generated_image = WebDriverWait(driver, 300).until(
             EC.presence_of_element_located((By.XPATH, '//*[@id="final_gallery"]/div[2]/div/button/img'))
         )
 
-        ssl_context = ssl._create_unverified_context()
-        image_src = generated_image.get_attribute("src")
+        print("Image generated, retrieving source")
+
+        # Retry logic to handle dynamic content loading
+        retries = 5
+        image_src = None
+        for attempt in range(retries):
+            image_src = generated_image.get_attribute("src")
+            if image_src:
+                break
+            time.sleep(2)  # Wait before retrying
+
+        if image_src is None:
+            error_message = "Failed to retrieve the image source after multiple attempts."
+            print(error_message)
+            return {"error": error_message}
+        
         print(image_src)
         image_id = image_src.split("/")[-1].split(".")[0] + "_png"
 
+        ssl_context = ssl._create_unverified_context()
         req = urllib.request.urlopen(image_src, context=ssl_context)
         arr = np.asarray(bytearray(req.read()), dtype=np.uint8)
         img = io.BytesIO(arr)
