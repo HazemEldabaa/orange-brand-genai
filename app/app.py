@@ -5,8 +5,8 @@ import subprocess
 import platform
 
 if platform.system() != 'Windows':
-    setup_script = 'setup.sh'
+    setup_script = 'app/setup.sh'
     if os.path.exists(setup_script):
         subprocess.run(['bash', setup_script])
-        
+
 show_pages_from_config()
