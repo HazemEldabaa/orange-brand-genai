@@ -10,7 +10,7 @@ generate_button = st.button("Generate Image")
 headless = st.checkbox("Headless Mode", value=False)
 
 url = "https://56fa32efe8bd3d139e.gradio.live/"
-json_link = "https://56fa32efe8bd3d139e.gradio.live/file=/content/drive/MyDrive/Fooocus/outputs/2024-06-14/log.html"
+json_link = "https://56fa32efe8bd3d139e.gradio.live/file=/content/drive/MyDrive/Fooocus/outputs/2024-06-15/log.html"
 
 st.write(f'Here is the link to the Gradio app: {url}')
 
