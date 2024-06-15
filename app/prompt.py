@@ -9,8 +9,8 @@ prompt = st.text_input("Enter your prompt here:")
 generate_button = st.button("Generate Image")
 headless = st.checkbox("Headless Mode", value=False)
 
-url = "https://56fa32efe8bd3d139e.gradio.live/"
-json_link = "https://56fa32efe8bd3d139e.gradio.live/file=/content/drive/MyDrive/Fooocus/outputs/2024-06-15/log.html"
+url = "https://bc2c737eaa21ac770c.gradio.live/"
+json_link = "https://bc2c737eaa21ac770c.gradio.live/file=/content/drive/MyDrive/Fooocus/outputs/2024-06-15/log.html"
 
 st.write(f'Here is the link to the Gradio app: {url}')
 
