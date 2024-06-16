@@ -44,7 +44,7 @@ if selectedImageUrl is not None:
     for metadata, image_path in images_data:
 
         if selectedImageUrl.endswith(os.path.basename(image_path)):
-            if metadata['Resolution'] == '(1152, 896)':
+            if metadata['Resolution'] in ['(1152, 896)', '(1024, 1024)']:
                 with col3:
                     st.image(selectedImageUrl, use_column_width=True)
 
