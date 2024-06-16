@@ -22,7 +22,7 @@ h11==0.14.0
 idna==3.7
 inflate64==1.0.0
 ipykernel==6.29.4
-ipython==8.25.0
+ipython
 jedi==0.19.1
 Jinja2==3.1.4
 jsonschema==4.22.0

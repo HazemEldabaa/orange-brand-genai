@@ -38,4 +38,4 @@ EXPOSE 8501
 ENV PYTHONUNBUFFERED=1
 
 # Run Streamlit when the container launches
-CMD ["streamlit", "run", "app.py", "--server.port=8501", "--server.enableCORS=false"]
+CMD ["streamlit", "run", "app/app.py", "--server.port=8501", "--server.enableCORS=false"]
