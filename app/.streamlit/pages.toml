@@ -4,14 +4,14 @@ name = "Home"
 icon = ":house:"
 
 [[pages]]
-path = "app/advice_app.py"
-name = "Carousel"
-icon = ":vibration_mode:"
-
-[[pages]]
-path = "app/blind_test.py"
+path = "blind_test.py"
 name = "Blind Test"
 icon = ":test_tube:"
+
+[[pages]]
+path = "advice_app.py"
+name = "Carousel"
+icon = ":vibration_mode:"
 
 [[pages]]
 path = "app/lora_explainer.py"
