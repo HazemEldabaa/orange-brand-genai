@@ -1,9 +1,6 @@
 import streamlit as st
 
-PAGE_TITLE = "Prompt"
-PAGE_ICON = ":orange_heart:"
-st.set_page_config(page_title=PAGE_TITLE, page_icon=PAGE_ICON, layout="wide")
-
+# Define the template for the output
 output_template = {
     "prompt": "",
     "negative_prompt": "unrealistic, (saturated:1.2), high contrast, big nose, painting, drawing, sketch, cartoon, anime, manga, render, CG, 3d, watermark, signature, label, Worst quality, Normal quality, Low quality, Low res, Blurry, Jpeg artifacts, Out of focus, Bad anatomy, Bad proportions, Deformed, Disconnected limbs, Disfigured, Extra arms, Extra limbs, Extra hands, Fused fingers, Gross proportions, Long neck, Malformed limbs, Mutated, Mutated hands, Mutated limbs, Missing arms, Missing fingers, Poorly drawn hands, Poorly drawn face, extra fingers, 2D, Sketch, Drawing, Bad photography, Bad photo, Deviant art, Artstation, Octane render, Painting, Oil painting, Illustration, very reflective skin, waxy skin, skin colored clothing, nsfw, nude, grain, buttons",
@@ -14,8 +11,8 @@ output_template = {
     "guidance_scale": 3,
     "sharpness": 2,
     "adm_guidance": "(1.5, 0.8, 0.3)",
-    "base_model": "mobius_v10.safetensors",
-    "refiner_model": "realisticVisionV60B1_v51HyperVAE.safetensors",
+    "base_model": "mobius.safetensors",
+    "refiner_model": "Realistic_vision_V6B1.safetensors",
     "refiner_switch": 0.6,
     "clip_skip": 2,
     "sampler": "dpmpp_2m_sde_gpu",
@@ -30,7 +27,8 @@ output_template = {
 
 # Streamlit app layout
 st.title("Prompt Generator for Fooocus v2.4.3")
-st.write("Follow this link: https://12bffe577853bb1d56.gradio.live/")
+st.write('Follow this link: https://12bffe577853bb1d56.gradio.live/')
+
 # Input prompt from user
 user_prompt = st.text_input("Enter your prompt:")
 
@@ -42,3 +40,4 @@ if user_prompt:
 
     # Display the output in JSON format
     st.json(output_template)
+
