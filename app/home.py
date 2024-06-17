@@ -62,12 +62,13 @@ with col1:
     )
 
 with col2:
-    st.markdown(
-        """
-        The Squad:
-    """
-    )    
-    st.image("app/imgs/team-angel.png")
+    # st.markdown(
+    #     """
+    #     The Squad:
+    # """
+    # )    
+    if st.button("Meet the team", key="team_button"):
+        st.image("app/imgs/team-angel.png")
 
 # Display footer
 footer = """

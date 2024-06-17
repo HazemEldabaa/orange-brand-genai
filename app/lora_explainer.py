@@ -11,7 +11,7 @@ with mid:
 
     st.markdown("""# Refiner""")
 
-    st.markdown(""" ### A refiner in the context of Stable Diffusion XL (SDXL) enhances the details and quality of generated images. \n  ### It works by fine-tuning the output of a primary model, ensuring higher fidelity and realism.""")
+    st.markdown(""" ### A refiner in the context of Stable Diffusion XL (SDXL) enhances the details and quality of generated images. \n  ### For our particular case, it works by fine-tuning the output of the primary model, ensuring higher fidelity and realism.""")
 
     # Display images with descriptions in columns
     col1, col2 = st.columns(2)
