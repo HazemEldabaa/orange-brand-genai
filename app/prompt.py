@@ -30,7 +30,7 @@ output_template = {
 
 # Streamlit app layout
 st.title("Prompt Generator for Fooocus v2.4.3")
-
+st.write("Follow this link: https://01d05ad324f3944317.gradio.live/")
 # Input prompt from user
 user_prompt = st.text_input("Enter your prompt:")
 
