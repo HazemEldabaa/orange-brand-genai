@@ -23,14 +23,14 @@ output_template = {
     "vae": "Default (model)",
     "seed": "-1",
     "lora_combined_1": "SDXL_FILM_PHOTOGRAPHY_STYLE_BetaV0.4.safetensors : 1.1",
-    "lora_combined_2": "PerfectEyesXL.safetensors : 0.6",
+    "lora_combined_2": "perfect_eyes.safetensors : 0.6",
     "metadata_scheme": False,
     "version": "Fooocus v2.4.3"
 }
 
 # Streamlit app layout
 st.title("Prompt Generator for Fooocus v2.4.3")
-st.write("Follow this link: https://01d05ad324f3944317.gradio.live/")
+st.write("Follow this link: https://12bffe577853bb1d56.gradio.live/")
 # Input prompt from user
 user_prompt = st.text_input("Enter your prompt:")
 
