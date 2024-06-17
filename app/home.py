@@ -48,6 +48,7 @@ with col1:
 
         **About the generation environment:**
         - Keywords extracted from brandbook as base
+        - Focus on senior segment
         - Stable diffusion models and improvement layers (Refiners, LoRAs)
         - Fooocus as GUI for easy experimentation
         - Minimum or no manual intervention on the image
