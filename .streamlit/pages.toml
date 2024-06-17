@@ -19,14 +19,14 @@ name = "Beyond BaseModel"
 icon = ":memo:"
 
 [[pages]]
-path = "app/prompt.py"
-name = "Prompt"
-icon = ":camera:"
-
-[[pages]]
 path = "app/conclusion.py"
 name = "Conclusion"
 icon = "🎯"
+
+[[pages]]
+path = "app/prompt.py"
+name = "Prompt"
+icon = ":camera:"
 
 [[pages]]
 path = "app/appendix.py"
