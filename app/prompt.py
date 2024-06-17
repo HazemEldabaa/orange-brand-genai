@@ -1,32 +1,44 @@
 import streamlit as st
-from prompt_utils import send_prompt
 
 PAGE_TITLE = "Prompt"
 PAGE_ICON = ":orange_heart:"
-st.set_page_config(page_title=PAGE_TITLE, page_icon=PAGE_ICON)
+st.set_page_config(page_title=PAGE_TITLE, page_icon=PAGE_ICON, layout="wide")
 
-prompt = st.text_input("Enter your prompt here:")
-generate_button = st.button("Generate Image")
+output_template = {
+    "prompt": "",
+    "negative_prompt": "unrealistic, (saturated:1.2), high contrast, big nose, painting, drawing, sketch, cartoon, anime, manga, render, CG, 3d, watermark, signature, label, Worst quality, Normal quality, Low quality, Low res, Blurry, Jpeg artifacts, Out of focus, Bad anatomy, Bad proportions, Deformed, Disconnected limbs, Disfigured, Extra arms, Extra limbs, Extra hands, Fused fingers, Gross proportions, Long neck, Malformed limbs, Mutated, Mutated hands, Mutated limbs, Missing arms, Missing fingers, Poorly drawn hands, Poorly drawn face, extra fingers, 2D, Sketch, Drawing, Bad photography, Bad photo, Deviant art, Artstation, Octane render, Painting, Oil painting, Illustration, very reflective skin, waxy skin, skin colored clothing, nsfw, nude, grain, buttons",
+    "prompt_expansion": "",
+    "styles": "[]",
+    "performance": "Quality",
+    "resolution": "(1152, 896)",
+    "guidance_scale": 3,
+    "sharpness": 2,
+    "adm_guidance": "(1.5, 0.8, 0.3)",
+    "base_model": "mobius_v10.safetensors",
+    "refiner_model": "realisticVisionV60B1_v51HyperVAE.safetensors",
+    "refiner_switch": 0.6,
+    "clip_skip": 2,
+    "sampler": "dpmpp_2m_sde_gpu",
+    "scheduler": "karras",
+    "vae": "Default (model)",
+    "seed": "-1",
+    "lora_combined_1": "SDXL_FILM_PHOTOGRAPHY_STYLE_BetaV0.4.safetensors : 1.1",
+    "lora_combined_2": "PerfectEyesXL.safetensors : 0.6",
+    "metadata_scheme": False,
+    "version": "Fooocus v2.4.3"
+}
 
-url = "https://dd6177cb29becbbd74.gradio.live/"
-json_link = "https://dd6177cb29becbbd74.gradio.live/file=/content/drive/MyDrive/Fooocus/outputs/2024-06-15/log.html"
+# Streamlit app layout
+st.title("Prompt Generator for Fooocus v2.4.3")
 
-st.write(f'Here is the link to the Gradio app: {url}')
+# Input prompt from user
+user_prompt = st.text_input("Enter your prompt:")
 
-if generate_button:
-    if prompt:
-        with st.spinner('Generating image...'):
-            result = send_prompt(url, prompt, json_link, headless=True)
-        if result:
-            if "error" in result:
-                st.error(f"Error: {result['error']}")
-            else:
-                for key, value in result.items():
-                    if key == 'image':
-                        st.image(value, caption='Generated Image')
-                    else:
-                        st.write(value)
-        else:
-            st.error("Failed to generate image. Please try again.")
-    else:
-        st.error("Please enter a prompt.")
+# When the user enters a prompt and clicks the button
+if user_prompt:
+    # Construct the new prompt with additional details
+    detailed_prompt = f"{user_prompt}, highly detailed, photorealistic"
+    output_template["prompt"] = detailed_prompt
+
+    # Display the output in JSON format
+    st.json(output_template)
